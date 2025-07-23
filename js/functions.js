@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable no-console */
 // 1 задание
 function isLenghtEqualOrLess(str, maxLenght) {
