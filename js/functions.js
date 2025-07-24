@@ -1,15 +1,13 @@
-/* eslint-disable radix */
 /* eslint-disable no-console */
 // 1 задание
-function isLenghtEqualOrLess(str, maxLenght) {
-  const currentLen = str.length;
+function isLengthEqualOrLess(str, maxLenght) {
 
-  return currentLen <= maxLenght;
+  return str.length <= maxLenght;
 }
 
-console.log(isLenghtEqualOrLess('проверяемая строка', 20)); // true
-console.log(isLenghtEqualOrLess('проверяемая строка', 18)); // true
-console.log(isLenghtEqualOrLess('проверяемая строка', 10)); // false
+console.log(isLengthEqualOrLess('проверяемая строка', 20)); // true
+console.log(isLengthEqualOrLess('проверяемая строка', 18)); // true
+console.log(isLengthEqualOrLess('проверяемая строка', 10)); // false
 
 // 2 задание
 function isPalindrome(str) {
@@ -33,18 +31,14 @@ function digitsToNumber(value) {
 
   for (let i = 0; i < str.length; i++) {
     const char = str[i];
-    const digit = parseInt(char);
+    const digit = parseInt(char, 10);
 
     if (!Number.isNaN(digit)) {
       digits += digit;
     }
   }
 
-  if (digits === '') {
-    return NaN;
-  }
-
-  return parseInt(digits);
+  return parseInt(digits, 10);
 }
 
 console.log(digitsToNumber('2023 год')); // 2023
