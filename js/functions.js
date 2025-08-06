@@ -49,3 +49,27 @@ console.log(digitsToNumber('а я томат')); // NaN
 console.log(digitsToNumber(2023)); // 2023
 console.log(digitsToNumber(-1)); // 1
 console.log(digitsToNumber(1.5)); //15
+
+//ЗАДАНИЕ 5.16
+const canScheduleMeeting = (startWork, endWork, meetingStart, meetingDuration) => {
+  const toMinutes = (timeStr) => {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const workStartMinutes = toMinutes(startWork);
+  const workEndMinutes = toMinutes(endWork);
+  const meetingStartMinutes = toMinutes(meetingStart);
+  const meetingEndMinutes = meetingStartMinutes + meetingDuration;
+
+  return (
+    meetingStartMinutes >= workStartMinutes &&
+    meetingEndMinutes <= workEndMinutes
+  );
+};
+
+console.log(canScheduleMeeting('08:00', '17:30', '14:00', 90)); // true
+console.log(canScheduleMeeting('8:0', '10:0', '8:0', 120)); // true
+console.log(canScheduleMeeting('08:00', '14:30', '14:00', 90)); // false
+console.log(canScheduleMeeting('14:00', '17:30', '08:0', 90)); // false
+console.log(canScheduleMeeting('8:00', '17:30', '08:00', 900)); // false
