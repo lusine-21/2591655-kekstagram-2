@@ -44,9 +44,7 @@ const renderComments = () => {
   shownCommentsCount.textContent = shownCount;
   totalCommentsCount.textContent = comments.length;
 
-  if (shownCount >= comments.length) {
-    commentsLoader.classList.add('hidden');
-  }
+  commentsLoader.classList.toggle('hidden', shownCount >= comments.length);
 };
 
 const openBigPicture = (photo) => {
@@ -63,17 +61,16 @@ const openBigPicture = (photo) => {
   commentsList.innerHTML = '';
   renderComments();
 
-  commentCountBlock.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+  commentCountBlock.classList.remove('hidden');
 
-  const onEscPress = (evt) => {
+  const onDocumentKeydown = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       closeBigPicture();
     }
   };
 
-  const onLoadMore = (evt) => {
+  const onCommentsLoaderClick = (evt) => {
     evt.preventDefault();
     renderComments();
   };
@@ -82,12 +79,12 @@ const openBigPicture = (photo) => {
   function closeBigPicture() {
     bigPicture.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    document.removeEventListener('keydown', onEscPress);
-    commentsLoader.removeEventListener('click', onLoadMore);
+    document.removeEventListener('keydown', onDocumentKeydown);
+    commentsLoader.removeEventListener('click', onCommentsLoaderClick);
   }
 
-  document.addEventListener('keydown', onEscPress);
-  commentsLoader.addEventListener('click', onLoadMore);
+  document.addEventListener('keydown', onDocumentKeydown);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
   closeButton.addEventListener('click', closeBigPicture, { once: true });
 };
 
