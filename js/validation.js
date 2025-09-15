@@ -1,7 +1,7 @@
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
-const HASHTAG_REGEX = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/i;
+const HASHTAG_REGEX = /^#[A-zА-яё0-9]{1,19}$/i;
 
 const ErrorMessage = {
   INVALID_HASHTAG: 'Неправильный хэштег',
@@ -11,8 +11,11 @@ const ErrorMessage = {
   COMMENT_TOO_LONG: `Длина комментария не может быть больше ${MAX_COMMENT_LENGTH} символов`
 };
 
-// --- Проверка хэштегов
+let errorMessage = '';
+
 const validateHashtags = (value) => {
+  errorMessage = '';
+
   if (!value.trim()) {
     return true;
   }
@@ -20,43 +23,32 @@ const validateHashtags = (value) => {
   const hashtags = value.trim().split(/\s+/);
 
   if (hashtags.length > MAX_HASHTAG_COUNT) {
+    errorMessage = ErrorMessage.HASHTAG_MAX_COUNT;
     return false;
   }
 
-  const lowerCaseTags = hashtags.map((tag) => tag.toLowerCase());
-  const uniqueTags = new Set(lowerCaseTags);
-
-  return hashtags.every((tag) => HASHTAG_REGEX.test(tag) && tag.length <= MAX_HASHTAG_LENGTH && tag !== '#')
-    && uniqueTags.size === hashtags.length;
-};
-
-const getHashtagErrorMessage = (value) => {
-  if (!value.trim()) {
-    return '';
-  }
-
-  const hashtags = value.trim().split(/\s+/);
-
-  if (hashtags.length > MAX_HASHTAG_COUNT) {
-    return ErrorMessage.HASHTAG_MAX_COUNT;
-  }
-
-  for (const tag of hashtags) {
-    if (tag.length > MAX_HASHTAG_LENGTH) {
-      return ErrorMessage.HASHTAG_TOO_LONG;
+  for (const hashtag of hashtags) {
+    if (hashtag.length > MAX_HASHTAG_LENGTH) {
+      errorMessage = ErrorMessage.HASHTAG_TOO_LONG;
+      return false;
     }
-    if (!HASHTAG_REGEX.test(tag) || tag === '#') {
-      return ErrorMessage.INVALID_HASHTAG;
+    if (hashtag === '#' || !HASHTAG_REGEX.test(hashtag)) {
+      errorMessage = ErrorMessage.INVALID_HASHTAG;
+      return false;
     }
   }
 
-  const lowerCaseTags = hashtags.map((tag) => tag.toLowerCase());
-  if (new Set(lowerCaseTags).size !== hashtags.length) {
-    return ErrorMessage.DUPLICATE_HASHTAG;
+  const lowerCaseHashtags = hashtags.map((tag) => tag.toLowerCase());
+  const uniqueHashtags = new Set(lowerCaseHashtags);
+  if (uniqueHashtags.size !== hashtags.length) {
+    errorMessage = ErrorMessage.DUPLICATE_HASHTAG;
+    return false;
   }
 
-  return '';
+  return true;
 };
+
+const getHashtagErrorMessage = () => errorMessage;
 
 // --- Проверка комментария
 const validateComment = (value) => value.length <= MAX_COMMENT_LENGTH;
@@ -67,7 +59,7 @@ const initUploadFormValidation = (form) => {
   const pristine = new Pristine(form, {
     classTo: 'img-upload__field-wrapper',
     errorTextParent: 'img-upload__field-wrapper',
-    errorTextClass: 'pristine-error'
+    errorTextClass: 'img-upload__field-wrapper--error'
   });
 
   const hashtagInput = form.querySelector('.text__hashtags');
@@ -94,4 +86,4 @@ const initUploadFormValidation = (form) => {
   return pristine;
 };
 
-export { initUploadFormValidation };
+export {initUploadFormValidation};

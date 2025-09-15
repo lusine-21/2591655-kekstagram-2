@@ -66,7 +66,7 @@ const openBigPicture = (photo) => {
   const onDocumentKeydown = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      closeBigPicture();
+      oncloseButtonClick();
     }
   };
 
@@ -75,8 +75,7 @@ const openBigPicture = (photo) => {
     renderComments();
   };
 
-
-  function closeBigPicture() {
+  function oncloseButtonClick() {
     bigPicture.classList.add('hidden');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onDocumentKeydown);
@@ -85,7 +84,7 @@ const openBigPicture = (photo) => {
 
   document.addEventListener('keydown', onDocumentKeydown);
   commentsLoader.addEventListener('click', onCommentsLoaderClick);
-  closeButton.addEventListener('click', closeBigPicture, { once: true });
+  closeButton.addEventListener('click', oncloseButtonClick, { once: true });
 };
 
 export {openBigPicture};
