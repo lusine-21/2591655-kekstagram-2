@@ -38,5 +38,4 @@ const initImageUploadForm = () => {
   cancelButton.addEventListener('click', onCancelButtonClick);
 };
 
-
 export {initImageUploadForm};
